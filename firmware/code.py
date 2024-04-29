@@ -10,6 +10,7 @@ lastButton = False
 state = False
 usb = usb_cdc.data
 usb_buffer = b""
+watchdogTimeout = 20
 
 def getLEDState():
     global usb_buffer
@@ -55,11 +56,16 @@ while True:
     
     # Check for LED state from USB
     ledState = getLEDState()
-    if ledState != None:
-        state = ledState
-    
-    if state:
-        pixels.fill((0, 255, 0))
+    if ledState == None:
+        if watchdogTimeout == 0:
+            pixels.fill((255,0,0))
+        else:
+            watchdogTimeout -= 1
     else:
-        pixels.fill((0, 0, 0))
+        watchdogTimeout = 20
+        state = ledState
+        if state:
+            pixels.fill((0, 255, 0))
+        else:
+            pixels.fill((0, 0, 0))
     time.sleep(0.1)
