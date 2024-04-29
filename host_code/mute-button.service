@@ -1,0 +1,14 @@
+[Unit]
+Description=X32 Mute Service
+After=multi-user.target
+
+[Service]
+Type=simple
+Restart=always
+ExecStart=/usr/local/bin/python3.11 /opt/x32MuteButton/host_code/x32Button.py
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=MuteService
+
+[Install]
+WantedBy=mulit-user.target
